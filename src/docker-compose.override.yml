@@ -8,6 +8,41 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+
+  basketdb:
+    container_name: basketdb
+    restart: always
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+
+  portainer:
+    container_name: portainer
+    restart: always
+    ports:
+      - "8080:8000"
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+  pgadmin:
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=suporte@mexx.ai
+      - PGADMIN_DEFAULT_PASSWORD=!nhaltdados10000
+    restart: always
+    ports:
+        - "6060:80"
+    volumes:
+      - pgadmin_data:/root/.pgadmin
+
   catalog.api:
     container_name: catalog.api
     environment:
@@ -17,3 +52,22 @@ services:
       - catalogdb
     ports:
       - "8000:80"
+  basket.api:
+    container_name: basket.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "CacheSettings:ConnectionString=basketdb:6379"
+      #- "GrpcSettings:DiscountUrl=http://discount.grpc"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+    depends_on:
+      - basketdb
+      - rabbitmq
+    ports:
+      - "8001:80"
+  discount.api:
+    container_name: discount.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=Server=bd.dev.mexx.ai;Port=5432;Database=DiscountDb;User Id=postgres;Password=!nhaltdados10000;"
+    ports:
+      - "8002:80"

@@ -30,13 +30,12 @@ namespace Basket.Api.Configs
             services.AddScoped<DiscountGrpcService>();
 
             // MassTransit-RabbitMQ Configuration
-            //services.AddMassTransit(config => {
-            //    config.UsingRabbitMq((ctx, cfg) => {
-            //        cfg.Host(configuration["EventBusSettings:HostAddress"]);
-            //    });
-            //});
-            //services.AddMassTransitHostedService();
-
+            services.AddMassTransit(config => {
+                config.UsingRabbitMq((ctx, cfg) => {
+                    cfg.Host(configuration["EventBusSettings:HostAddress"]);
+                });
+            });
+            
             services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
