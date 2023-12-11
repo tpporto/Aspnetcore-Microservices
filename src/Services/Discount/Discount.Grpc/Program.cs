@@ -1,4 +1,4 @@
-using Discount.Grpc.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,5 +12,6 @@ var app = builder.Build();
 Discount.Grpc.Configs.ApiConfig.WebApiConfigApplication(app, builder.Environment);
 
 
+Discount.Grpc.Extensions.HostExtensions.MigrateDatabase<Program>(app);
 
 app.Run();

@@ -1,5 +1,6 @@
 ﻿using Basket.Api.GrpcServices;
 using Basket.Api.Repositories;
+using Discount.Grpc.Protos;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
@@ -24,8 +25,8 @@ namespace Basket.Api.Configs
             services.AddAutoMapper(Assembly.GetEntryAssembly());
 
             // Grpc Configuration
-            //services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>
-            //    (o => o.Address = new Uri(configuration["GrpcSettings:DiscountUrl"]));
+            services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>
+                (o => o.Address = new Uri(configuration["GrpcSettings:DiscountUrl"]));
            
             services.AddScoped<DiscountGrpcService>();
 
