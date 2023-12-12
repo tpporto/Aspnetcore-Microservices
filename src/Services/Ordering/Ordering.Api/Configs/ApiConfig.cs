@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Ordering.Application;
+using Ordering.Infrastructure;
 
 namespace Ordering.Api.Configs
 {
@@ -10,9 +12,9 @@ namespace Ordering.Api.Configs
         public static IServiceCollection WebApiConfigService(this IServiceCollection services, IConfiguration configuration)
         {
             // Add services to the container.
-            /*
             services.AddApplicationServices();
             services.AddInfrastructureServices(configuration);
+            /*
 
             // MassTransit-RabbitMQ Configuration
             services.AddMassTransit(config => {
