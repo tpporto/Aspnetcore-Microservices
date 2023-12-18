@@ -1,15 +1,13 @@
-﻿using MediatR;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ordering.Application.Features.Orders.Commands.UpdateOrder
+namespace EventBus.Messages.Events
 {
-    public class UpdateOrderCommand : IRequest<Unit>
+    public class BasketCheckoutEvent : IntegrationBaseEvent
     {
-        public int Id { get; set; }
         public string UserName { get; set; }
         public double TotalPrice { get; set; }
 

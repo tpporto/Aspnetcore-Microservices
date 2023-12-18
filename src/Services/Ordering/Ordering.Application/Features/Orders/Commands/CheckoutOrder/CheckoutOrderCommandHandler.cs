@@ -41,7 +41,10 @@ namespace Ordering.Application.Features.Orders.Commands.CheckoutOrder
 
             try
             {
-                await _emailService.SendEmail(email);
+                if (!await _emailService.SendEmail(email)) {
+
+                    _logger.LogError($"Order {order.Id} failed due to an error with the mail service.");
+                }
             }
             catch (Exception ex)
             {

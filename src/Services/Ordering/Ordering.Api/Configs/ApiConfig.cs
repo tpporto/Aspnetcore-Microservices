@@ -53,8 +53,9 @@ namespace Ordering.Api.Configs
         public static IApplicationBuilder WebApiConfigApplication(this WebApplication app, IWebHostEnvironment env)
         {
 
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             // Configure the HTTP request pipeline.
-           
+
             app.UseAuthorization();
 
             app.MapControllers();
