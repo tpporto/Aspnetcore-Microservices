@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Ordering.Application.Features.Orders.Commands.CheckoutOrder;
 
 namespace Ordering.Api.Mapping
 {
@@ -6,7 +7,7 @@ namespace Ordering.Api.Mapping
     {
         public OrderingProfile()
         {
-           // CreateMap<CheckoutOrderCommand, BasketCheckoutEvent>().ReverseMap();
+            //CreateMap<CheckoutOrderCommand, BasketCheckoutEvent>().ReverseMap();
         }
     }
 }

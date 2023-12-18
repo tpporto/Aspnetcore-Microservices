@@ -2,8 +2,8 @@
 using Microsoft.Extensions.Options;
 using Ordering.Application.Contracts.Infrastructure;
 using Ordering.Application.Models;
-using SendGrid;
-using SendGrid.Helpers.Mail;
+using System.Net.Mail;
+using System.Net;
 
 namespace Ordering.Infrastructure.Mail
 {
@@ -20,28 +20,51 @@ namespace Ordering.Infrastructure.Mail
 
         public async Task<bool> SendEmail(Email email)
         {
-            var client = new SendGridClient(_emailSettings.ApiKey);
+            //var client = new SendGridClient(_emailSettings.ApiKey);
 
             var subject = email.Subject;
-            var to = new EmailAddress(email.To);
             var emailBody = email.Body;
 
-            var from = new EmailAddress
+            var from = new MailAddress(_emailSettings.FromAddress, _emailSettings.FromName);
+
+            MailMessage mail = new MailMessage()
             {
-                Email = _emailSettings.FromAddress,
-                Name = _emailSettings.FromName
+                From = from,
+                
             };
+            mail.Subject = subject;
 
-            var sendGridMessage = MailHelper.CreateSingleEmail(from, to, subject, emailBody, emailBody);
-            var response = await client.SendEmailAsync(sendGridMessage);
+            mail.To.Add(new MailAddress(email.To));
+            mail.Body = emailBody.ToString();
+            mail.IsBodyHtml = true;
 
-            _logger.LogInformation("Email sent.");
+            try
+            {
+                using (SmtpClient smtp = new SmtpClient(_emailSettings.Host, (int)_emailSettings.Port))
+                {
+                    smtp.EnableSsl = true;
+                    smtp.UseDefaultCredentials = false; // IMPORTANTE PARA LINUX
+                    smtp.Credentials = new NetworkCredential(_emailSettings.UserName, _emailSettings.Password);
+                    smtp.Host = _emailSettings.Host;
+                    smtp.Port = _emailSettings.Port;
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    // ATENCAO!! REMOVI O AWAIT AQUI PRA VER SE O USUARIO N É PUNIDO PELO TEMPO DE DISPARO DOS EMAILS. A IDEIA É QUE O PROGRAMA SIGA PROCESSANDO E O ENVIO DE EMAIL SEJA FEITO NO SEU TEPO, SEM SEGURAR O USUARIO NO FRONT// PORTO
+                    await smtp.SendMailAsync(mail);
+                    _logger.LogInformation("Email sent.");
 
-            if (response.StatusCode == System.Net.HttpStatusCode.Accepted || response.StatusCode == System.Net.HttpStatusCode.OK)
-                return true;
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
 
-            _logger.LogError("Email sending failed.");
-            return false;
+                _logger.LogError("Email sending failed.");
+                return false;
+            }
+
+
+
+
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Ordering.Api.Configs
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.Load("Ordering.Domain"), Assembly.Load("Ordering.Api")));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.Load("Ordering.Domain"), Assembly.Load("Ordering.Application"), Assembly.Load("Ordering.Api")));
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
