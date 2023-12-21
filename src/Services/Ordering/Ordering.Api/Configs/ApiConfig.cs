@@ -4,6 +4,8 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using Ordering.Application;
 using Ordering.Infrastructure;
+using Ordering.Api.EventBusConsumer;
+using EventBus.Messages.Common;
 
 namespace Ordering.Api.Configs
 {
@@ -14,7 +16,7 @@ namespace Ordering.Api.Configs
             // Add services to the container.
             services.AddApplicationServices();
             services.AddInfrastructureServices(configuration);
-            /*
+            
 
             // MassTransit-RabbitMQ Configuration
             services.AddMassTransit(config => {
@@ -30,12 +32,12 @@ namespace Ordering.Api.Configs
                     });
                 });
             });
-            services.AddMassTransitHostedService();
-            */
+            //services.AddMassTransitHostedService();
+            
             // General Configuration
             services.AddAutoMapper(Assembly.GetEntryAssembly());
 
-            //services.AddScoped<BasketCheckoutConsumer>();
+            services.AddScoped<BasketCheckoutConsumer>();
 
 
             services.AddControllers();

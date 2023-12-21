@@ -34,9 +34,11 @@ namespace Basket.Api.Configs
             services.AddMassTransit(config => {
                 config.UsingRabbitMq((ctx, cfg) => {
                     cfg.Host(configuration["EventBusSettings:HostAddress"]);
+                    
                 });
             });
-            
+            //services.AddMassTransitHostedService();
+
             services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();

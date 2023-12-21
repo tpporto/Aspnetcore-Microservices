@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
-using MassTransit.Mediator;
+using EventBus.Messages.Events;
 using MassTransit;
+using MediatR;
+using Ordering.Application.Features.Orders.Commands.CheckoutOrder;
 
 namespace Ordering.Api.EventBusConsumer
 {
-    /*
+   
     public class BasketCheckoutConsumer : IConsumer<BasketCheckoutEvent>
     {
         private readonly IMediator _mediator;
@@ -26,5 +28,5 @@ namespace Ordering.Api.EventBusConsumer
             _logger.LogInformation("BasketCheckoutEvent consumed successfully. Created Order Id : {newOrderId}", result);
         }
     }
-    */
+    
 }
